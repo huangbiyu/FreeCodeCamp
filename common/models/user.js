@@ -41,6 +41,8 @@ module.exports = function(User) {
     User.definition.properties.rand.default = function() {
       return Math.random();
     };
+  // increase user accessToken ttl to 900 days
+  User.settings.ttl = 900 * 24 * 60 * 60 * 1000;
 
   // username should not be in blacklist
   User.validatesExclusionOf('username', {
@@ -302,6 +304,48 @@ module.exports = function(User) {
       http: {
         path: '/about',
         verb: 'get'
+      }
+    }
+  );
+
+  User.prototype.updateEmail = function updateEmail(email) {
+    if (this.email && this.email === email) {
+      return Promise.reject(new Error(
+        `${email} is already associated with this account.`
+      ));
+    }
+    return User.doesExist(null, email)
+      .then(exists => {
+        if (exists) {
+          return Promise.reject(
+            new Error(`${email} is already associated with another account.`)
+          );
+        }
+        return this.update$({ email }).toPromise();
+      });
+  };
+
+  User.remoteMethod(
+    'updateEmail',
+    {
+      isStatic: false,
+      description: 'updates the email of the user object',
+      accepts: [
+        {
+          arg: 'email',
+          type: 'string',
+          required: true
+        }
+      ],
+      returns: [
+        {
+          arg: 'status',
+          type: 'object'
+        }
+      ],
+      http: {
+        path: '/update-email',
+        verb: 'POST'
       }
     }
   );
