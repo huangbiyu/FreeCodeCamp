@@ -24,7 +24,7 @@ If you've found a bug that is not on the board, [follow these steps](#found-a-bu
 
 ## Contribution Guidelines
 
-1.  Fork the project: [How To Fork And Maintain a Local Instance of Free Code Camp](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/How-To-Fork-And-Maintain-a-Local-Instance-of-Free-Code-Camp)
+1.  Fork the project: [How To Fork And Maintain a Local Instance of Free Code Camp](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/FreeCodeCamp-Fork-Local)
 2.  Create a branch specific to the issue or feature you are working on. Push your work to that branch. ([Need help with branching?](https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches))
 3.  Name the branch something like `fix/xxx` or `feature/xxx` where `xxx` is a short description of the changes or feature you are attempting to add. For example `fix/email-login` would be a branch where I fix something specific to email login.
 4. [Set up Linting](#linting-setup) to run as you make changes.
@@ -104,7 +104,7 @@ You should have [ESLint running in your editor](http://eslint.org/docs/user-guid
 ## Found a bug?
 Do not file an issue until you have followed these steps:
 
-1. Read [Help I've Found a Bug](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Help-I've-Found-a-Bug) wiki page and follow the instructions there.
+1. Read [Help I've Found a Bug](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/FreeCodeCamp-Report-Bugs) wiki page and follow the instructions there.
 2. Asked for confirmation in the appropriate [Help Room](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Help-Rooms)
 3. Please *do not* open an issue without a 3rd party confirmation of your problem.
 
@@ -190,11 +190,10 @@ Be sure to post in the PR conversation that you have made the requested changes.
 
 ## Other resources
 
-- [Searching for Your Issue on GitHub](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Searching-for-Your-Issue-on-GitHub)
+- [Searching for Your Issue on GitHub](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Search-Existing-Issues)
 - [Creating a New GitHub Issue](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Creating-a-New-GitHub-Issue)
-- [Select Issues for Contributing Using Labels](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Select-Issues-for-Contributing-Using-Labels)
-- [How to clone the FreeCodeCamp website on a Windows pc](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/How-to-clone-the-FreeCodeCamp-website-on-a-Windows-pc)
-- [How to log in to your local FCC site - using GitHub](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/How-To-Log-In-To-Your-Local-FCC-Site)
-- [Contributions Guide - With a demo on fixing a typo](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Contributions-Guide---with-Typo-Demo)
-- [Writing great git commit message](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Writing-great-git-commit-message)
+- [Select Issues for Contributing Using Labels](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/FreeCodeCamp-Issue-Labels)
+- [How to clone the FreeCodeCamp website on a Windows pc](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/FreeCodeCamp-Fork-Windows)
+- [How to log in to your local FCC site - using GitHub](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/FreeCodeCamp-Log-In-To-Local-Instance)
+- [Writing great git commit message](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Git-Commit-Message)
 - [Contributor Chat Support - For the FCC Repositories, and running a local instance] (https://gitter.im/FreeCodeCamp/HelpContributors)

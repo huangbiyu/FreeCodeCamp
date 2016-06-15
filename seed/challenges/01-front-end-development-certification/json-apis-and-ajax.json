@@ -10,10 +10,10 @@
       "description": [
         "In this section, we'll learn how to get data from APIs. APIs - or Application Programming Interfaces - are tools that computers use to communicate with one another.",
         "We'll also learn how to update HTML with the data we get from these APIs using a technology called Ajax.",
-        "First, let's review what the <code>$(document).ready()</code> function does. This function makes it so all code inside of it only runs  once our page loads.",
-        "Let's make our \"Get Message\" button change the text of the element with the class <code>message</code>.",
-        "Before we can do this, we need to implement a <code>click event</code> inside of our <code>$(document).ready()</code> function by adding this code:",
-        "<blockquote>$(\"#getMessage\").on(\"click\", function(){</br></br>});</blockquote>"
+        "First, let's review what the <code>$(document).ready()</code> function does. This function runs such that all of the code inside of it executes only once our page has finished loading.",
+        "So Let's start by implementing a <code>click event handler</code> inside of our <code>$(document).ready()</code> function by adding this code:",
+        "<blockquote>$(\"#getMessage\").on(\"click\", function(){</br></br>});</blockquote>",
+        "After completing this, proceed to the next challenge where we will make our \"Get Message\" button change the text of the element with the class <code>message</code>."
       ],
       "challengeSeed": [
         "fccss",
@@ -286,7 +286,7 @@
       "id": "56bbb991ad1ed5201cd392d8",
       "title": "Render Images from Data Sources",
       "description": [
-        "We've seen from the last two lessons that each object in our JSON array contains an <code>imageLink</code> key with a value that is the url of a cat's image.",
+        "We've seen from the last two lessons that each object in our JSON array contains an <code>imageLink</code> key with a value that is the URL of a cat's image.",
         "When we're looping through these objects, let's use this <code>imageLink</code> property to display this image in an <code>img</code> element.",
         "Here's the code that does this:",
         "<code>html += \"&lt;img src = '\" + val.imageLink + \"'&gt;\";</code>"
@@ -346,14 +346,14 @@
       "challengeType": 0,
       "titleEs": "Presenta imágenes de fuentes de datos",
       "descriptionEs": [
-        "Hemos visto en las dos últimas lecciones que cada objeto en nuestro vector JSON contiene una llave <code>imageLink</code> con un valor que corresponde a la url de la imagen de un gato.",
+        "Hemos visto en las dos últimas lecciones que cada objeto en nuestro vector JSON contiene una llave <code>imageLink</code> con un valor que corresponde a la URL de la imagen de un gato.",
         "Cuando estamos recorriendo estos objetos, usemos esta propiedad <code>imageLink</code> para visualizar la imagen en un elemento <code>img</code>.",
         "Aquí está el código que hace esto:",
         "<code>html += \"&lt;img src = '\" + val.imageLink + \"'&gt;\";</code>"
       ],
       "titlePt": "Apresentar as imagens da fonte de dados",
       "descriptionPt": [
-        "Como temos visto nas ultimas lições, cada objeto em nosso array JSON contém a chave <code>imageLink</code> com um valor que corresponde a url da imagem de um gato.",
+        "Como temos visto nas ultimas lições, cada objeto em nosso array JSON contém a chave <code>imageLink</code> com um valor que corresponde a URL da imagem de um gato.",
         "Quando estamos percorrendo por estes objetos, usamos a propriedade <code>imageLink</code> para visualizar a imagem em um elemento <code>img</code>.",
         "Aqui está o código para fazer isso:",
         "<code>html += \"&lt;img src = '\" + val.imageLink + \"'&gt;\";</code>"
@@ -447,7 +447,7 @@
         "You will see a prompt to allow or block this site from knowing your current location. The challenge can be completed either way, as long as the code is correct.",
         "By selecting allow you will see the text on the output phone change to your latitude and longitude",
         "Here's some code that does this:",
-        "<blockquote>if (navigator.geolocation) {</br>  navigator.geolocation.getCurrentPosition(function(position) {</br>    $(\"#data\").html(\"latitude: \" + position.coords.latitude + \"&lt;br&gt;longitude: \" + position.coords.longitude);</br>  });</br>}</blockquote>"
+        "<blockquote>if (navigator.geolocation) {<br>  navigator.geolocation.getCurrentPosition(function(position) {<br>    $(\"#data\").html(\"latitude: \" + position.coords.latitude + \"&lt;br&gt;longitude: \" + position.coords.longitude);<br>  });<br>}</blockquote>"
       ],
       "challengeSeed": [
         "fccss",
@@ -463,7 +463,10 @@
         "</div>"
       ],
       "tests": [
-        "assert(code.match(/navigator\\.geolocation\\.getCurrentPosition/gi), 'message: You should make use of the <code>navigator.geolocation</code> to access the users current location.');"
+        "assert(code.match(/navigator\\.geolocation\\.getCurrentPosition/gi), 'message: You should make use of <code>navigator.geolocation</code> to access the users current location.');",
+        "assert(code.match(/position\\.coords\\.latitude/gi), 'message: You should make use of <code>position.coords.latitude</code> to display the users&#39; latitudinal location.');",
+        "assert(code.match(/position\\.coords\\.longitude/gi), 'message: You should make use of <code>position.coords.longitude</code> to display the users&#39; longitudinal location.');",
+        "assert(code.match(/\\$\\(\\s*\"#data\"\\s*\\)\\s*\\.html\\([.\\w\\W]*?\\);/gi), 'message: You should display the users&#39; position within the <code>data</code> div element');"
       ],
       "type": "waypoint",
       "challengeType": 0,

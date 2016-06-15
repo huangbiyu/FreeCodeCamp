@@ -5,7 +5,7 @@ block content
         h2.text-center Actions
         .row
           .col-xs-12
-            a.btn.btn-lg.btn-block.btn-primary.btn-link-social(class = "nightMode-btn") Night Mode
+            a#night-mode.btn.btn-lg.btn-block.btn-primary.btn-link-social Night Mode
         .row
           .col-xs-12
               if (!user.isGithubCool)
@@ -121,7 +121,7 @@ block content
                           a.close(href='#', data-dismiss='modal', aria-hidden='true') ×
                           h3 You don't really want to delete your account, do you?
                       .modal-body
-                          p This will really delete all your data, including all your progress, news stories and brownie points.
+                          p This will really delete all your data, including all your progress and brownie points.
                           p We won't be able to recover any of it for you later, even if you change your mind.
                           p If there's something we could do better, send us an email instead and we'll do our best: &thinsp;
                               a(href="mailto:team@freecodecamp.com") team@freecodecamp.com

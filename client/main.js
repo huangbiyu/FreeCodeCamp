@@ -165,6 +165,7 @@ main.setMapShare = function setMapShare(id) {
 
 $(document).ready(function() {
 
+  const { Observable } = window.Rx;
   var CSRF_HEADER = 'X-CSRF-Token';
 
   var setCSRFToken = function(securityToken) {
@@ -185,75 +186,6 @@ $(document).ready(function() {
         'https://s3.amazonaws.com/freecodecamp/camper-image-placeholder.png'
       );
   });
-
-  function upvoteHandler(e) {
-    e.preventDefault();
-    var upvoteBtn = this;
-    var id = upvoteBtn.id;
-    var upVotes = $(upvoteBtn).data().upVotes;
-    var username = typeof username !== 'undefined' ? username : '';
-    var alreadyUpvoted = false;
-    for (var i = 0; i < upVotes.length; i++) {
-      if (upVotes[i].upVotedBy === username) {
-        alreadyUpvoted = true;
-        break;
-      }
-    }
-    if (!alreadyUpvoted) {
-      $.post('/stories/upvote', { id: id })
-        .fail(function() {
-          $(upvoteBtn).bind('click', upvoteHandler);
-        })
-        .done(function(data) {
-          $(upvoteBtn)
-            .text('Upvoted!')
-            .addClass('disabled');
-
-          $('#storyRank').text(data.rank + ' points');
-        });
-    }
-  }
-
-  $('#story-list').on('click', 'button.btn-upvote', upvoteHandler);
-
-  var storySubmitButtonHandler = function storySubmitButtonHandler() {
-
-    if (!$('#story-submission-form')[0].checkValidity()) {
-      return null;
-    }
-
-    var link = $('#story-url').val();
-    var headline = $('#story-title').val();
-    var description = $('#description-box').val();
-    var data = {
-      data: {
-        link: link,
-        headline: headline,
-        timePosted: Date.now(),
-        description: description,
-        storyMetaDescription: main.storyMetaDescription,
-        rank: 1,
-        image: main.storyImage
-      }
-    };
-
-    $('#story-submit').unbind('click');
-    return $.post('/stories/', data)
-      .fail(function() {
-        $('#story-submit').bind('click', storySubmitButtonHandler);
-      })
-      .done(function({ storyLink, isBanned }) {
-        if (isBanned) {
-          window.location = '/news';
-          return null;
-        }
-        window.location = '/stories/' + storyLink;
-        return null;
-      });
-  };
-
-  $('#story-submit').on('click', storySubmitButtonHandler);
-
 
   // map sharing
   var alreadyShared = main.getMapShares();
@@ -390,18 +322,46 @@ $(document).ready(function() {
   }
 
   $('#nav-wiki-btn').on('click', function(event) {
-      if (!(event.ctrlKey || event.metaKey)) {
-          toggleWiki();
-      }
+    if (!(event.ctrlKey || event.metaKey)) {
+      toggleWiki();
+    }
   });
 
   $('.wiki-aside-action-collapse').on('click', collapseWiki);
 
+  function getWikiPath() {
+    if (!window.common) {
+      return false;
+    }
+    var challengeType = window.common.challengeType;
+    var dashedName = window.common.dashedName;
+    var prefix = '';
+    // Get wiki prefix depending on type of challenge
+    // Type 0, 1 typically have solutions on the wiki prefixed with 'challenge-'
+    // Type 5 typically has a solution on the wiki prefixed with algorithm-'
+    if (challengeType === '0' || challengeType === '1') {
+      prefix = 'challenge-';
+      return prefix + dashedName;
+    }
+    if (challengeType === '5') {
+      prefix = 'algorithm-';
+      return prefix + dashedName;
+    }
+    return false;
+  }
+
   function showWiki() {
     if (!main.isWikiAsideLoad) {
+      var wikiURL = '//freecodecamp.github.io/wiki/en/';
       var lang = window.location.toString().match(/\/\w{2}\//);
       lang = (lang) ? lang[0] : '/en/';
-      var wikiURL = '//freecodecamp.github.io/wiki' + lang;
+      var wikiPath = getWikiPath();
+      if (wikiPath) {
+        wikiURL = wikiURL + wikiPath + '/';
+      } else if (lang !== '/en/') {
+        // Strip default '/en/' language ending and add the user's language
+        wikiURL = wikiURL.substr(0, wikiURL.length - 4) + lang;
+      }
       var wikiAside = $('<iframe>');
       wikiAside.attr({
         src: wikiURL,
@@ -548,51 +508,68 @@ $(document).ready(function() {
   // keyboard shortcuts: open map
   window.Mousetrap.bind('g m', toggleMap);
 
-  // Night Mode
-  function changeMode() {
-    var newValue = false;
-    try {
-      newValue = !JSON.parse(localStorage.getItem('nightMode'));
-    } catch (e) {
-      console.error('Error parsing value form local storage:', 'nightMode', e);
-    }
-    localStorage.setItem('nightMode', String(newValue));
-    toggleNightMode(newValue);
+  function addAlert(message = '', type = 'alert-info') {
+    return $('.flashMessage').append($(`
+      <div class='alert ${type}'>
+        <button class='close' type='button', data-dismiss='alert'>
+          <span class='ion-close-circled' />
+        </Button>
+        <div>${message}</div>
+      </div>
+    `));
   }
 
-  function toggleNightMode(nightModeEnabled) {
-    var iframe = document.getElementById('map-aside-frame');
-    if (iframe) {
-      iframe.src = iframe.src;
+  function toggleNightMode() {
+    if (!main.userId) {
+      return addAlert('You must be logged in to use our themes.');
     }
-    var body = $('body');
-    body.hide();
-    if (nightModeEnabled) {
-      body.addClass('night');
+    const iframe$ = document.getElementById('map-aside-frame');
+    const body$ = $('body');
+    if (iframe$) {
+      iframe$.src = iframe$.src;
+    }
+    body$.hide();
+    let updateThemeTo;
+    if (body$.hasClass('night')) {
+      body$.removeClass('night');
+      updateThemeTo = 'default';
     } else {
-      body.removeClass('night');
+      body$.addClass('night');
+      updateThemeTo = 'night';
     }
-    body.fadeIn('100');
+    body$.fadeIn('100');
+    const options = {
+      url: `/api/users/${main.userId}/update-theme`,
+      type: 'POST',
+      data: { theme: updateThemeTo },
+      dataType: 'json'
+    };
+    return $.ajax(options)
+      .success(() => console.log('theme updated successfully'))
+      .fail(err => {
+        let message;
+        try {
+          message = JSON.parse(err.responseText).error.message;
+        } catch (error) {
+          return null;
+        }
+        if (!message) {
+          return null;
+        }
+        return addAlert(message);
+      });
   }
 
-  if (typeof localStorage.getItem('nightMode') !== 'undefined') {
-    var oldVal = false;
-    try {
-      oldVal = JSON.parse(localStorage.getItem('nightMode'));
-    } catch (e) {
-      console.error('Error parsing value form local storage:', 'nightMode', e);
-    }
-    toggleNightMode(oldVal);
-    $('.nightMode-btn').on('click', function() {
-      changeMode();
-    });
-  } else {
-    localStorage.setItem('nightMode', 'false');
-    toggleNightMode('false');
-  }
+  Observable.merge(
+    Observable.fromEvent($('#night-mode'), 'click'),
+    Observable.create(observer => {
+      window.Mousetrap.bind('g t n', () => observer.onNext());
+    })
+  )
+    .debounce(500)
+    .subscribe(toggleNightMode, err => console.error(err));
 
   // Hot Keys
-  window.Mousetrap.bind('g t n', changeMode);
   window.Mousetrap.bind('g n n', () => {
     // Next Challenge
     window.location = '/challenges/next-challenge';

@@ -16,6 +16,9 @@
         }
       }
     },
+    "emailVerifyTTL": {
+      "type": "date"
+    },
     "password": {
       "type": "string"
     },
@@ -188,6 +191,10 @@
     },
     "timezone": {
       "type": "string"
+    },
+    "theme": {
+      "type": "string",
+      "default": "default"
     }
   },
   "validations": [],
@@ -242,6 +249,13 @@
       "principalId": "$owner",
       "permission": "ALLOW",
       "property": "updateEmail"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": "updateTheme"
     }
   ],
   "methods": []
